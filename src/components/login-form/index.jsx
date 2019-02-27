@@ -19,8 +19,8 @@ class LoginForm extends Component {
             callback('密码不能为空！');
         }else if(!(/^[a-zA-Z0-9_]+$/.test(value))){
             callback('密码只能包含英文/数字或者下划线！');
-        } else if(!(value.length>=6)){
-            callback('密码长度不能小于6位');
+        } else if(!(value.length>=5)){
+            callback('密码长度不能小于5位');
         } else {
             callback();
         }
@@ -29,11 +29,12 @@ class LoginForm extends Component {
     handleSubmit=(e)=>{
         const {validateFields,resetFields}=this.props.form;
         e.preventDefault();
-        validateFields((error,values)=>{
+        validateFields(async (error,values)=>{
             if(!error){
                 //校验通过
-                console.log('收集的表单数据：',values)
+
                 this.props.login(values.username,values.password);
+
             } else {
                 //校验失败,收集错误信息并提示
                 const errMsg=Object.values(error).reduce((prev,curr)=>{
@@ -74,7 +75,7 @@ class LoginForm extends Component {
                                       {validator:this.checkPassword}
                                   ]
                                }
-                           )(<Input placeholder="输入密码" prefix={<Icon type="safety" />}/>)
+                           )(<Input placeholder="输入密码" type="password" prefix={<Icon type="safety" />}/>)
                        }
                    </Item>
                    <Item>
