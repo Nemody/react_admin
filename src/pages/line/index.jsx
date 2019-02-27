@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 
-export default class ContentFooter extends Component {
+export default class Line extends Component {
     render(){
         return (
             <div>
-                ContentFooter
+                Line
             </div>
         )
     }

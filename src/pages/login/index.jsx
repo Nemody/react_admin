@@ -3,7 +3,7 @@ import LoginForm from '../../components/login-form';
 
 import {reqLogin} from '../../api/index';
 
-import logo from './logo.png';
+import logo from '../../assets/images/logo.png';
 import './index.less';
 
 
