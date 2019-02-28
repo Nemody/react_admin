@@ -4,5 +4,6 @@
  * */
 import ajax from './ajax';
 
-const baseUrl='http://localhost:3000';
+
+const baseUrl=process.env.NODE_ENV === 'development'? '': 'http://localhost:5000';
 export const reqLogin = async (username, password) =>await  ajax(baseUrl+'/login', {username, password}, 'POST');

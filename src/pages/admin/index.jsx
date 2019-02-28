@@ -14,11 +14,18 @@ import Pie from '../pie';
 import Line from '../line';
 import Bar from '../bar';
 
-
-
+import MemoryUtils from '../../utils/memoryUtils';
 import './index.less'
 export default class Admin extends Component {
+
     render(){
+        //进行登陆验证
+        const user= MemoryUtils.user;
+        if(!user || !user._id){
+            //如果用户没有登陆信息或者登陆信息无id，视为用户没有登陆。需要跳转到登陆页面，重新登录
+            return <Redirect to="/login"/>
+        }
+
         return (
                 <Row className='admin'>
                     <Col span={4} className='admin-left'>

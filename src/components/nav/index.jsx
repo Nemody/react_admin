@@ -22,17 +22,17 @@ class Nav extends Component {
                 //在此对当前的路径pathname与children上的key属性做比较，若一致，则在刷新页面时选中并自动展开子菜单
                  const result =item.children.find((item)=>item.key === pathname);
                  if(result){
-                     // console.log(item.key); //结果为/pie
+                     // console.log(item.key); //结果为/charts
                      this.openKey=item.key;
-                     // console.log(this.openKey);//结果为/pie
+                     // console.log(this.openKey);//结果为/charts
                  }
                  /*if(result){
                     此处若直接将result上的值赋给this.openKey，则获取到的为二级菜单的路由地址
                     而要想实现菜单自动展开的功能，要获取到的应是一级菜单的路由地址，因此以下方法无法实现需求
                     对比上方代码可知区别之处。
-                         console.log(result.key); // 结果为/pie/bin
+                         console.log(result.key); // 结果为/charts/xxx
                          this.openKey=result.key;
-                         console.log(this.openKey); //结果为/pie/bin
+                         console.log(this.openKey); //结果为charts/xxx
                  }*/
                 //若有，则说明有子菜单
                   return (

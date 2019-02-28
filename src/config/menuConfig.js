@@ -33,7 +33,7 @@ const menuList=[
     },
     {
         title:'图形图表',
-        key:'/pie',
+        key:'/charts',
         icon:'area-chart',
         children:[
             {
