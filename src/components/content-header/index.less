@@ -1,4 +1,35 @@
 .content-header{
-  height: 150px;
-  background-color: lightyellow;
+  .content-header-top{
+    padding: 20px;
+    text-align: right;
+    border-bottom: 1px solid #1DA57A;
+    a{
+      margin:0 10px 0 30px ;
+    }
+  }
+  .content-header-bottom{
+    padding: 10px;
+    .left{
+       font-size: 16px;
+       text-align: center;
+        &::after{
+          content: '';
+          position: absolute;
+          left: 50%;
+          bottom: -25px;
+          transform: translateX(-50%);
+          border-top: 15px solid #fff;
+          border-right: 15px solid transparent;
+          border-left: 15px solid transparent;
+        }
+     }
+    .right{
+      padding:0 10px 0 0;
+      text-align: right;
+      img{
+        width: 30px;
+        margin: 0 10px 0 15px;
+      }
+    }
+  }
 }

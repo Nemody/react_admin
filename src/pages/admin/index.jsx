@@ -5,7 +5,7 @@ import {Route,Switch,Redirect} from 'react-router-dom';
 import Nav from '../../components/nav';
 import ContentHeader from '../../components/content-header';
 import ContentFooter from '../../components/content-footer';
-import Home from '../main'
+import Home from '../home'
 import Category from '../category';
 import Product from '../product';
 import User from '../user';
