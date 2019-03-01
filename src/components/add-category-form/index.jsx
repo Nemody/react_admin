@@ -32,13 +32,6 @@ class AddCategoryForm extends Component {
                                {
                                    categories.map(item=>{
                                        return <Option value={item._id} key={item._id}>{item.name}</Option>
-                                       {/*
-                                       此处为什么要将value设置为item._id？
-                                       在之后添加分类的操作中，倘若添加一级分类，则其parentId默认为0 .倘若要添加二级分类，
-                                       则需要知道将要添加到哪个一级分类上去，所以需要获得二级分类的目标父类Id，因此将value
-                                       设置为item._id，添加时即可通过getFieldsValue获取控件的value，也就是用户选中的分类Id，即为
-                                       二级分类的目标父类Id
-                                       */}
                                    })
                                }
                        </Select>
@@ -60,4 +53,11 @@ class AddCategoryForm extends Component {
     }
 }
 
+/*
+ 为什么要将value设置为item._id？
+ 在之后添加分类的操作中，倘若添加一级分类，则其parentId默认为0 .倘若要添加二级分类，
+ 则需要知道将要添加到哪个一级分类上去，所以需要获得二级分类的目标父类Id，因此将value
+ 设置为item._id，添加时即可通过getFieldsValue获取控件的value，也就是用户选中的分类Id，即为
+ 二级分类的目标父类Id
+ */
 export default Form.create()(AddCategoryForm);

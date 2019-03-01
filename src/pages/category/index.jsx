@@ -3,6 +3,7 @@ import {Modal, Table, Button, Card, Icon, message} from 'antd';
 import {reqCategories, reqAddCategories, reqUpdateCategoryName} from '../../api';
 import AddCategoryForm from '../../components/add-category-form';
 import UpdateCategoryForm from '../../components/update-category-form' ;
+import MyButton from '../../components/my-button';
 
 export default class Category extends Component {
     state = {
@@ -22,14 +23,14 @@ export default class Category extends Component {
             render: category => {
                 return (
                     <div>
-                        <a href="javascript:void(0)" onClick={() => this.setState(
+                        <MyButton name="修改名称" onClick={() => this.setState(
                             {
                                 isShowUpdate: true,
                                 category: category
                             }
                         )
-                        }>修改名称</a> &nbsp;&nbsp;&nbsp;
-                        <a href="javascript:void(0)">查看其子品类</a>
+                        } /> &nbsp;&nbsp;&nbsp;
+                        <MyButton name="查看其子品类"/>
                     </div>
                 )
             },
@@ -146,7 +147,7 @@ export default class Category extends Component {
                         dataSource={categories}
                         bordered
                         pagination={{
-                            pageSize: 5,
+                            pageSize: 10,
                             showSizeChanger: true,
                             pageSizeOptions: ['5', '10', '15', '20'],
                             showQuickJumper: true
