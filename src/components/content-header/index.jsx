@@ -78,31 +78,17 @@ class ContentHeader extends Component {
     getWeather=(city)=>{
         reqWeather(city)
             .then(res=>{
-                console.log(res.dayPictureUrl);
-                console.log(res.weather);
                 //获取数据成功
                 this.setState({
                     dayPictureUrl:res.dayPictureUrl,
                     weather:res.weather
                 })
-                console.log(res.dayPictureUrl);
-                console.log(res.weather);
             })
             .catch(err=>{
                 //获取数据失败
                 message.error('网络不稳定，请稍后重试');
             })
-        /*if(result){
-            //获取数据成功
-            const {dayPictureUrl,weather}=result;
-            this.setState({
-                dayPictureUrl:dayPictureUrl,
-                weather:weather
-            })
-        } else {
-            //获取数据失败
-            message.error('获取天气数据失败，请稍后重试');
-        }*/
+
     }
 
     render() {

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
-import { Row, Col } from 'antd';
+import {Layout } from 'antd';
+
 import {Route,Switch,Redirect} from 'react-router-dom';
 import Nav from '../../components/nav';
 import ContentHeader from '../../components/content-header';
@@ -15,7 +16,8 @@ import Line from '../line';
 import Bar from '../bar';
 
 import MemoryUtils from '../../utils/memoryUtils';
-import './index.less'
+
+const {Content, Sider} = Layout;
 export default class Admin extends Component {
 
     render(){
@@ -27,13 +29,13 @@ export default class Admin extends Component {
         }
 
         return (
-                <Row className='admin'>
-                    <Col span={4} className='admin-left'>
+                <Layout >
+                    <Sider>
                         <Nav />
-                    </Col>
-                    <Col span={20}>
+                    </Sider>
+                    <Layout style={{minHeight:'100vh'}}>
                         <ContentHeader />
-                        <div className="admin-content">
+                        <Content>
                             <Switch>
                                 <Route path='/home' component={Home}/>
                                 <Route path='/category' component={Category}/>
@@ -43,11 +45,12 @@ export default class Admin extends Component {
                                 <Route path='/charts/pie' component={Pie}/>
                                 <Route path='/charts/line' component={Line}/>
                                 <Route path='/charts/bar' component={Bar}/>
+                                <Redirect to="/home" />
                             </Switch>
-                        </div>
+                        </Content>
                         <ContentFooter />
-                    </Col>
-                </Row>
+                    </Layout>
+                </Layout>
         )
     }
 }
