@@ -1,12 +1,15 @@
 import React, {Component} from 'react';
 import {Modal, Table, Button, Card, Icon, message} from 'antd';
-import {reqCategories, reqAddCategories} from '../../api';
+import {reqCategories, reqAddCategories, reqUpdateCategoryName} from '../../api';
 import AddCategoryForm from '../../components/add-category-form';
+import UpdateCategoryForm from '../../components/update-category-form' ;
 
 export default class Category extends Component {
     state = {
         categories: [],
-        isShowAdd: false
+        isShowAdd: false,
+        isShowUpdate: false,
+        category: {}
     }
 
     componentWillMount() {
@@ -15,12 +18,17 @@ export default class Category extends Component {
             dataIndex: 'name',
         }, {
             title: '操作',
-            dataIndex: 'operation',
             width: 300,
-            render: text => {
+            render: category => {
                 return (
                     <div>
-                        <a href="javascript:void(0)" >修改名称</a> &nbsp;&nbsp;&nbsp;
+                        <a href="javascript:void(0)" onClick={() => this.setState(
+                            {
+                                isShowUpdate: true,
+                                category: category
+                            }
+                        )
+                        }>修改名称</a> &nbsp;&nbsp;&nbsp;
                         <a href="javascript:void(0)">查看其子品类</a>
                     </div>
                 )
@@ -38,18 +46,20 @@ export default class Category extends Component {
             //数据添加成功
             message.success('添加分类成功！');
             this.setState({
-                categories:[...this.state.categories,result.data],
-                isShowAdd:false
+                categories: [...this.state.categories, result.data],
+                isShowAdd: false
             })
         } else {
             //数据添加失败
             message.error('添加分类失败！');
             this.setState({
-                isShowAdd:false
+                isShowAdd: false
             })
         }
-    }
 
+        //清除用户输入的内容，霍夫默认值
+        this.form.resetFields();
+    }
 
     componentDidMount = () => {
         this.getCategories('0');
@@ -84,11 +94,45 @@ export default class Category extends Component {
             })
     }
 
+    //定义修改分类名称的方法
+    updateCategoryName = async () => {
+        const categoryName = this.form.getFieldValue('categoryName');
+        const {name, _id} = this.state.category;
+        if (categoryName === name) {
+            //前后名称一致，提示用户输入不一样的名称
+            message.warn('不能与修改前名称一致，请重新输入！');
+        } else {
+            //前后名称不一致，修改后台数据及前端显示
+            const result = await reqUpdateCategoryName(_id, categoryName);
+            console.log(result);
+            if (result.status === 0) {
+                //提示用户修改成功，并修改前端显示
+                message.success('分类名称修改成功！');
+                this.setState({
+                    categories: this.state.categories.map(item => {
+                        if (item._id === _id) {
+                            item.name = categoryName;
+                        }
+                        ;
+                        //因为修改的只是其中一个分类的值，因此无论是否修改成功，都要将item返回
+                        return item;
+                    }),
+                    isShowUpdate: false
+                });
+            } else {
+                //提示用户修改失败
+                message.error('分类名称修改失败，请稍后重试！');
+                this.setState({
+                    isShowUpdate: false
+                });
+            }
+        }
 
+
+    }
 
     render() {
-
-        const {categories, isShowAdd} = this.state;
+        const {categories, isShowAdd, isShowUpdate, category} = this.state;
         return (
             <div className="category">
                 <Card className="show-category"
@@ -114,9 +158,23 @@ export default class Category extends Component {
                         title="添加分类"
                         visible={isShowAdd}
                         onOk={this.addCategory}
-                        onCancel={()=>{this.setState({isShowAdd:false})}}
+                        onCancel={() => {
+                            this.setState({isShowAdd: false})
+                        }}
                     >
-                        <AddCategoryForm categories={categories} setForm={form=>this.form=form}/>
+                        <AddCategoryForm categories={categories} setForm={form => this.form = form}/>
+                    </Modal>
+                    <Modal
+                        title="更新分类"
+                        visible={isShowUpdate}
+                        width={300}
+                        closable={false}
+                        onOk={this.updateCategoryName}
+                        onCancel={() => {
+                            this.setState({isShowUpdate: false})
+                        }}
+                    >
+                        <UpdateCategoryForm categoryName={category.name} setForm={form => this.form = form}/>
                     </Modal>
                 </Card>
             </div>

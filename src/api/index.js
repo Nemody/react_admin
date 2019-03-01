@@ -28,5 +28,7 @@ export const reqWeather=(city)=>{
 }
 //获取分类列表的函数
 export const reqCategories=parentId=> ajax(baseUrl+'/manage/category/list',{parentId},'GET');
-//定义添加的函数
-export const reqAddCategories=(parentId,categoryName)=>ajax(baseUrl+'/manage/category/add',{parentId,categoryName},'POST')
+//定义添加分类的函数
+export const reqAddCategories=(parentId,categoryName)=>ajax(baseUrl+'/manage/category/add',{parentId,categoryName},'POST');
+//定义修改分类名称的函数
+export const reqUpdateCategoryName=(categoryId,categoryName)=>ajax(baseUrl+'/manage/category/update',{categoryId,categoryName},'POST')
