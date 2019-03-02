@@ -20,7 +20,7 @@ class Nav extends Component {
         return menu.map((item)=>{
             if(item.children){
                 //在此对当前的路径pathname与children上的key属性做比较，若一致，则在刷新页面时选中并自动展开子菜单
-                 const result =item.children.find((item)=>item.key === pathname);
+                 const result =item.children.find((item)=>pathname.indexOf(item.key)===0);
                  if(result){
                      // console.log(item.key); //结果为/charts
                      this.openKey=item.key;
@@ -59,7 +59,11 @@ class Nav extends Component {
 
 
     render(){
-        const {pathname}=this.props.location;
+        let {pathname}=this.props.location;
+
+        if (/^\/product/.test(pathname)){
+            pathname='/product';
+        }
 
         return (
             <div className="nav">

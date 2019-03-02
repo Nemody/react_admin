@@ -8,7 +8,7 @@ import ContentHeader from '../../components/content-header';
 import ContentFooter from '../../components/content-footer';
 import Home from '../home'
 import Category from '../category';
-import Product from '../product';
+import Product from '../product/product';
 import User from '../user';
 import Role from '../role';
 import Pie from '../pie';
@@ -29,13 +29,13 @@ export default class Admin extends Component {
         }
 
         return (
-                <Layout >
+                <Layout style={{minHeight:'100vh'}}>
                     <Sider>
                         <Nav />
                     </Sider>
-                    <Layout style={{minHeight:'100vh'}}>
+                    <Layout >
                         <ContentHeader />
-                        <Content>
+                        <Content style={{margin: 18}}>
                             <Switch>
                                 <Route path='/home' component={Home}/>
                                 <Route path='/category' component={Category}/>

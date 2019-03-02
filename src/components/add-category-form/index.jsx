@@ -27,7 +27,7 @@ class AddCategoryForm extends Component {
                                initialValue:'0'
                            }
                        )(
-                           <Select defaultValue="0">
+                           <Select initialValue="0">
                            <Option key="0" value="0">一级分类</Option>
                                {
                                    categories.map(item=>{

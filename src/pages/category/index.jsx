@@ -10,29 +10,55 @@ export default class Category extends Component {
         categories: [],
         isShowAdd: false,
         isShowUpdate: false,
-        category: {}
+        category: {},
+        parentId: '0',
+        parentName: '',
+        subCategories: [],
+        isSubCategoryLoading:true
     }
 
     componentWillMount() {
         this.columns = [{
             title: '品类名称',
-            dataIndex: 'name',
+            dataIndex: 'name'
         }, {
             title: '操作',
             width: 300,
             render: category => {
-                return (
-                    <div>
+                if (category.parentId === '0') {
+                    return (
+                        <div>
+                            <MyButton name="修改名称" onClick={() => this.setState(
+                                {
+                                    isShowUpdate: true,
+                                    category: category
+                                }
+                            )
+                            }/> &nbsp;&nbsp;&nbsp;
+                            <MyButton name="查看其子品类" onClick={() => {
+                                this.setState(
+                                    {
+                                        parentId: category._id,
+                                        parentName: category.name
+                                    }
+                                )
+                                this.getCategories(category._id);
+                            }
+                            }/>
+                        </div>
+                    )
+                } else {
+                    return (
                         <MyButton name="修改名称" onClick={() => this.setState(
                             {
                                 isShowUpdate: true,
                                 category: category
                             }
                         )
-                        } /> &nbsp;&nbsp;&nbsp;
-                        <MyButton name="查看其子品类"/>
-                    </div>
-                )
+                        }/>
+                    )
+                }
+
             },
         }];
     }
@@ -70,10 +96,15 @@ export default class Category extends Component {
         const result = await reqCategories(parentId);
         if (result.status === 0) {
             //获取数据成功,在页面展示数据
-            this.setState({
-                categories: result.data
-            })
-
+            if (parentId === '0') {
+                this.setState({
+                    categories: result.data
+                })
+            } else {
+                this.setState({
+                    subCategories: result.data
+                })
+            }
         } else {
             //获取数据失败
             message.error('获取分类列表失败！');
@@ -81,18 +112,30 @@ export default class Category extends Component {
     }
 
     //定义添加分类列表的方法
-    addCategories = async (parentId, categoryName) => {
-        reqAddCategories(parentId, categoryName)
-            .then(res => {
-                //添加数据成功
-                this.setState({
-                    categories: [...this.state.categories, res.data]
-                })
-            })
-            .catch(err => {
-                //添加数据失败
-                message.error('添加分类失败！');
-            })
+    addCategory= async () => {
+        const {parentId, categoryName} = this.form.getFieldsValue();
+
+        const result = await reqAddCategories(parentId, categoryName);
+
+        let updateState={isShowAdd:false};
+        if (result.status === 0) {
+            //添加数据成功
+            message.success('数据添加成功！');
+            const currentId = this.state.parentId;
+            if (parentId === '0') {
+                    updateState.categories=[...this.state.categories, result.data];
+            } else if (currentId === parentId){
+                    updateState.subCategories = [...this.state.subCategories, result.data];
+            }
+        } else {
+            //添加数据失败
+            message.error('添加分类失败！');
+        }
+        //清空用户输入
+        this.form.resetFields();
+        //统一更新状态数据
+        this.setState(updateState);
+
     }
 
     //定义修改分类名称的方法
@@ -133,18 +176,30 @@ export default class Category extends Component {
     }
 
     render() {
-        const {categories, isShowAdd, isShowUpdate, category} = this.state;
+        const {categories, isShowAdd, isShowUpdate, category, subCategories, parentId, parentName} = this.state;
+        const isCategory = parentId === '0';
+        let data = [];
+        if (isCategory) {
+            data = categories;
+        } else {
+            data = subCategories;
+        }
+
         return (
             <div className="category">
                 <Card className="show-category"
-                      title="一级品类列表"
+                      title={
+                          parentId === '0' ? "一级品类列表" : <div><MyButton onClick={() => {
+                              this.setState({parentId: '0'})
+                          }} name="一级分类"/><Icon type="arrow-right"/>&nbsp;&nbsp;{parentName}</div>
+                      }
                       extra={<Button type="primary" onClick={() => {
                           this.setState({isShowAdd: true})
                       }}><Icon type="plus"/>添加品类</Button>}
                 >
                     <Table
                         columns={this.columns}
-                        dataSource={categories}
+                        dataSource={data}
                         bordered
                         pagination={{
                             pageSize: 10,
