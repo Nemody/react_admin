@@ -47,7 +47,10 @@ class ContentHeader extends Component {
 
     //定义获取当前菜单项的函数
     getTitle = (menu) => {
-        const {pathname} = this.props.location;
+       let {pathname} = this.props.location;
+        if(/^\/product/.test(pathname)){
+            pathname='/product';
+        }
         for (let i = 0; i < menu.length; i++) {
             const item = menu[i];
             if (item.children) {

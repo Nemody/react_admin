@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
-import {Card, Input, Button, Select, Icon,Table} from 'antd';
+import {Card, Input, Button, Select, Icon,Table,message} from 'antd';
 
+import {reqProductsList} from '../../api';
 import MyButton from '../../components/my-button';
 
 const Option = Select.Option;
 export default class Index extends Component {
+    state={
+        productsList:[],
+        total:0
+    }
 
     componentWillMount() {
         this.columns = [
@@ -19,7 +24,8 @@ export default class Index extends Component {
             {
                 title: '价格',
                 dataIndex:'price',
-                width:200
+                width:200,
+                render:text=>'¥'+text
             },
             {
                 title: '状态',
@@ -27,7 +33,7 @@ export default class Index extends Component {
                 render:()=>{
                     return (
                         <div>
-                            <Button>上架</Button>&nbsp;&nbsp;
+                            <Button type="primary">上架</Button>&nbsp;&nbsp;
                             已下架
                         </div>
                     )
@@ -39,17 +45,35 @@ export default class Index extends Component {
                 render: () => {
                     return (
                         <div>
+                            <MyButton name="详情"/>
                             <MyButton name="修改"/>
-                            <MyButton name="描述"/>
                         </div>
                     )
                 },
             }
         ];
     }
-
+    componentDidMount(){
+        this.getProductsList(1,5);
+    }
+    //定义获取分页商品列表的方法
+    getProductsList=async (pageNum,pageSize)=>{
+        const result=await reqProductsList(pageNum,pageSize);
+        console.log(result);
+        if(result.status===0){
+            //数据读取成功
+            message.success('读取列表成功！');
+            this.setState({
+                productsList:result.data.list,
+                total:result.data.total
+            })
+        } else {
+            message.error('读取列表失败！')
+        }
+    }
 
     render() {
+        const {productsList,total}=this.state;
         return (
             <Card
                 title={
@@ -67,13 +91,17 @@ export default class Index extends Component {
             >
                 <Table
                     columns={this.columns}
-                    dataSource={[]}
+                    dataSource={productsList}
                     bordered
                     pagination={{
-                        pageSize: 10,
+                        defaultPageSize: 5,
                         showSizeChanger: true,
                         pageSizeOptions: ['5', '10', '15', '20'],
-                        showQuickJumper: true
+                        showQuickJumper: true,
+                        total,
+                        onChange:this.getProductsList,
+                        onShowSizeChange:this.getProductsList
+
                     }}
                     loading={false}
                     rowKey='_id'

@@ -33,9 +33,6 @@ export const reqAddCategories=(parentId,categoryName)=>ajax(baseUrl+'/manage/cat
 //定义修改分类名称的函数
 export const reqUpdateCategoryName=(categoryId,categoryName)=>ajax(baseUrl+'/manage/category/update',{categoryId,categoryName},'POST')
 //定义根据ID获取分类的方法
-export const reqGetCategoryById=(categoryId)=>ajax(baseUrl+'/manage/category/info',{categoryId},'GET')
-/*
-
-http://localhost:3001/manage/category/info?categoryId=5c7894129d79013c3cd0b73a
- http://localhost:5000/manage/category/info?categoryId=5c7894129d79013c3cd0b73a
-*/
+export const reqGetCategoryById=(categoryId)=>ajax(baseUrl+'/manage/category/info',{categoryId},'GET');
+//定义获取分页商品列表的函数
+export const reqProductsList=(pageNum,pageSize)=>ajax(baseUrl+'/manage/product/list',{pageNum,pageSize},'GET');
