@@ -97,8 +97,11 @@ export default class Index extends Component {
                         </Select>
                         <Input placeholder="关键字" style={{width: 200, marginLeft: 10, marginRight: 10}} onChange={e=>this.handleChange('searchName',e.target.value)}/>
                         <Button type="primary" onClick={()=>{this.getProductsList(1,3)}}>搜索</Button>
-                        <Button type="primary" style={{float: 'right', marginRight: 20}}><Icon
-                            type="plus"/>添加产品</Button>
+                        <Button
+                            type="primary"
+                            style={{float: 'right', marginRight: 20}}
+                            onClick={()=>{this.props.history.push('/product/saveupdate')}}>
+                            <Icon type="plus"/>添加产品</Button>
                     </div>
                 }
             >
