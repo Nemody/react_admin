@@ -101,9 +101,19 @@ export default class Category extends Component {
                     categories: result.data
                 })
             } else {
-                this.setState({
-                    subCategories: result.data
-                })
+                if(result.data.length){
+                    //说明请求的二级分类数据不为空
+                    this.setState({
+                        subCategories: result.data,
+                        isSubCategoryLoading:true
+                    })
+                } else {
+                    //说明请求的二级分类数据为空
+                    this.setState({
+                        subCategories:result.data,
+                        isSubCategoryLoading:false
+                    })
+                }
             }
         } else {
             //获取数据失败
@@ -176,14 +186,11 @@ export default class Category extends Component {
     }
 
     render() {
-        const {categories, isShowAdd, isShowUpdate, category, subCategories, parentId, parentName} = this.state;
+        const {categories, isShowAdd, isShowUpdate, category, subCategories, parentId, parentName,isSubCategoryLoading} = this.state;
         const isCategory = parentId === '0';
-        let data = [];
-        if (isCategory) {
-            data = categories;
-        } else {
-            data = subCategories;
-        }
+
+        const data=isCategory?categories:subCategories;
+        const isLoading=isCategory?categories.length===0:isSubCategoryLoading&&subCategories.length===0;
 
         return (
             <div className="category">
@@ -207,7 +214,7 @@ export default class Category extends Component {
                             pageSizeOptions: ['5', '10', '15', '20'],
                             showQuickJumper: true
                         }}
-                        loading={categories.length === 0}
+                        loading={isLoading}
                         rowKey='_id'
                     />
                     <Modal
