@@ -36,3 +36,6 @@ export const reqUpdateCategoryName=(categoryId,categoryName)=>ajax(baseUrl+'/man
 export const reqGetCategoryById=(categoryId)=>ajax(baseUrl+'/manage/category/info',{categoryId},'GET');
 //定义获取分页商品列表的函数
 export const reqProductsList=(pageNum,pageSize)=>ajax(baseUrl+'/manage/product/list',{pageNum,pageSize},'GET');
+//定义搜索分页商品列表的函数
+export const reqSearchProductsList=({pageNum,pageSize,searchType,searchName})=>ajax(baseUrl+'/manage/product/search',{pageNum,pageSize,[searchType]:searchName},'GET');
+
