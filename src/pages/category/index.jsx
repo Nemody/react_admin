@@ -122,6 +122,8 @@ export default class Category extends Component {
     }
 
     //定义添加分类列表的方法
+    //简单写法，先将更新后的状态保存在一个对象中，最后统一更新状态，只重新渲染一次页面即可
+
     addCategory= async () => {
         const {parentId, categoryName} = this.form.getFieldsValue();
 
@@ -135,6 +137,7 @@ export default class Category extends Component {
             if (parentId === '0') {
                     updateState.categories=[...this.state.categories, result.data];
             } else if (currentId === parentId){
+                    this.state.categories.push(result.data);
                     updateState.subCategories = [...this.state.subCategories, result.data];
             }
         } else {
@@ -147,7 +150,51 @@ export default class Category extends Component {
         this.setState(updateState);
 
     }
+    //原始写法--需多次更新状态，导致页面多次渲染，影响效率
+   /* addCategory= async () => {
+        const {parentId, categoryName} = this.form.getFieldsValue();
 
+        const result = await reqAddCategories(parentId, categoryName);
+
+        if (result.status === 0) {
+            //添加数据成功
+            message.success('数据添加成功！');
+            const currentId = this.state.parentId;
+            if (parentId === '0') {
+                if(currentId==='0'){
+                    this.setState({
+                        categories:[...this.state.categories,result.data],
+                        isShowAdd:false
+                    })
+                } else {
+                    //当不需要一级分类的列表时，将状态中的一级分类数据更改为最新的，但不使用this.setState方法更新状态
+                    //这样在点击一级分类按钮时就可以直接获取到最新数据而无需再次请求
+                    this.state.categories.push(result.data);
+                    this.setState({
+                        isShowAdd:false
+                    })
+                }
+            } else {
+                if(currentId === parentId){
+                    this.setState({
+                        subCategories:[...this.state.subCategories, result.data],
+                        isShowAdd:false
+                    })
+                } else {
+                    this.setState({
+                        isShowAdd:false
+                    })
+                }
+            }
+        } else {
+            //添加数据失败
+            message.error('添加分类失败！');
+        }
+        //清空用户输入
+        this.form.resetFields();
+
+
+    }*/
     //定义修改分类名称的方法
     updateCategoryName = async () => {
         const categoryName = this.form.getFieldValue('categoryName');
@@ -188,7 +235,8 @@ export default class Category extends Component {
     render() {
         const {categories, isShowAdd, isShowUpdate, category, subCategories, parentId, parentName,isSubCategoryLoading} = this.state;
         const isCategory = parentId === '0';
-
+        //不建议直接在此处发送请求，可能会使程序陷入死循环，存在运行隐患
+        // this.getCategories(parentId);
         const data=isCategory?categories:subCategories;
         const isLoading=isCategory?categories.length===0:isSubCategoryLoading&&subCategories.length===0;
 
@@ -197,7 +245,7 @@ export default class Category extends Component {
                 <Card className="show-category"
                       title={
                           parentId === '0' ? "一级品类列表" : <div><MyButton onClick={() => {
-                              this.setState({parentId: '0'})
+                              this.setState({parentId: '0'});
                           }} name="一级分类"/><Icon type="arrow-right"/>&nbsp;&nbsp;{parentName}</div>
                       }
                       extra={<Button type="primary" onClick={() => {

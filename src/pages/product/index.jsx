@@ -44,11 +44,11 @@ export default class Index extends Component {
             {
                 title: '操作',
                 width: 200,
-                render: () => {
+                render: (product) => {
                     return (
                         <div>
                             <MyButton name="详情"/>
-                            <MyButton name="修改"/>
+                            <MyButton name="修改" onClick={()=>this.props.history.push('/product/saveupdate',{product})}/>
                         </div>
                     )
                 },
@@ -101,7 +101,7 @@ export default class Index extends Component {
                             type="primary"
                             style={{float: 'right', marginRight: 20}}
                             onClick={()=>{this.props.history.push('/product/saveupdate')}}>
-                            <Icon type="plus"/>添加产品</Button>
+                            <Icon type="plus" />添加商品</Button>
                     </div>
                 }
             >
@@ -117,7 +117,7 @@ export default class Index extends Component {
                         total,
                         onChange:this.getProductsList,
                         onShowSizeChange:this.getProductsList
-
+                     /*   defaultCurrent:1*/
                     }}
                     loading={false}
                     rowKey='_id'

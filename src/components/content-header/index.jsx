@@ -49,7 +49,7 @@ class ContentHeader extends Component {
     getTitle = (menu) => {
        let {pathname} = this.props.location;
         if(/^\/product/.test(pathname)){
-            pathname='/product';
+            return '商品管理';
         }
         for (let i = 0; i < menu.length; i++) {
             const item = menu[i];
