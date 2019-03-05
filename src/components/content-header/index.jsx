@@ -9,24 +9,19 @@ import {removeItem} from '../../utils/storageUtils';
 import menuList from '../../config/menuConfig';
 import {reqWeather} from '../../api';
 import MyButton from '../../components/my-button';
-
 class ContentHeader extends Component {
-
     state={
         sysTimer:dayjs().format('YYYY-MM-DD HH:mm:ss'),
         dayPictureUrl:'http://api.map.baidu.com/images/weather/day/qing.png',
         weather:'阴转多云'
     }
-
     componentDidMount(){
         this.updateTime();
         this.getWeather('北京');
     }
-
     componentWiiUpmount(){
         clearInterval(this.intervalId);
     }
-
     //定义退出登录的事件处理函数
     logOut = () => {
         //用户点击退出登录
@@ -44,7 +39,6 @@ class ContentHeader extends Component {
             }
         });
     }
-
     //定义获取当前菜单项的函数
     getTitle = (menu) => {
        let {pathname} = this.props.location;
@@ -68,7 +62,6 @@ class ContentHeader extends Component {
             }
         }
     }
-
     //定义获取时间的函数
     updateTime=()=>{
         this.intervalId=setInterval(()=>{
@@ -77,7 +70,6 @@ class ContentHeader extends Component {
             })
         },1000)
     }
-
     //定义获取天气的函数
     getWeather=(city)=>{
         reqWeather(city)
@@ -94,7 +86,6 @@ class ContentHeader extends Component {
             })
 
     }
-
     render() {
         const {username} = MemoryUtils.user;
         const title=this.getTitle(menuList);

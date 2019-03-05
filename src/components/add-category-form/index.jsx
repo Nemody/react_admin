@@ -1,54 +1,50 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import { Select ,Form,Input} from 'antd';
-const Item=Form.Item;
+import {Select, Form, Input} from 'antd';
+const Item = Form.Item;
 const Option = Select.Option;
 class AddCategoryForm extends Component {
-    static propTypes={
-        categories:PropTypes.array.isRequired,
-        setForm:PropTypes.func.isRequired
+    static propTypes = {
+        categories: PropTypes.array.isRequired,
+        setForm: PropTypes.func.isRequired
     }
-
-    componentWillMount(){
+    componentWillMount() {
         this.props.setForm(this.props.form);
     }
-
-    render(){
-        const {getFieldDecorator} =this.props.form;
-        const {categories}=this.props;
+    render() {
+        const {getFieldDecorator} = this.props.form;
+        const {categories} = this.props;
         return (
-           <Form>
-               <Item label="所属分类">
-                   {
-                       getFieldDecorator(
-                           'parentId',
-                           {
-                               initialValue:'0'
-                           }
-                       )(
-                           <Select initialValue="0">
-                           <Option key="0" value="0">一级分类</Option>
-                               {
-                                   categories.map(item=>{
-                                       return <Option value={item._id} key={item._id}>{item.name}</Option>
-                                   })
-                               }
-                       </Select>
-                       )
-                   }
-
-               </Item>
-               <Item label="分类名称">
-                   {
-                       getFieldDecorator(
-                           'categoryName',
-                           {}
-                       )( <Input placeholder="请输入分类名称" />)
-                   }
-
-               </Item>
-           </Form>
+            <Form>
+                <Item label="所属分类">
+                    {
+                        getFieldDecorator(
+                            'parentId',
+                            {
+                                initialValue: '0'
+                            }
+                        )(
+                            <Select initialValue="0">
+                                <Option key="0" value="0">一级分类</Option>
+                                {
+                                    categories.map(item => {
+                                        return <Option value={item._id} key={item._id}>{item.name}</Option>
+                                    })
+                                }
+                            </Select>
+                        )
+                    }
+                </Item>
+                <Item label="分类名称">
+                    {
+                        getFieldDecorator(
+                            'categoryName',
+                            {}
+                        )(<Input placeholder="请输入分类名称"/>)
+                    }
+                </Item>
+            </Form>
         )
     }
 }

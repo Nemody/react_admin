@@ -38,4 +38,13 @@ export const reqGetCategoryById=(categoryId)=>ajax(baseUrl+'/manage/category/inf
 export const reqProductsList=(pageNum,pageSize)=>ajax(baseUrl+'/manage/product/list',{pageNum,pageSize},'GET');
 //定义搜索分页商品列表的函数
 export const reqSearchProductsList=({pageNum,pageSize,searchType,searchName})=>ajax(baseUrl+'/manage/product/search',{pageNum,pageSize,[searchType]:searchName},'GET');
-
+//定义删除图片的请求
+export const reqDelImage=(name,pictureId)=>ajax(baseUrl+'/manage/img/delete',{name,pictureId},'POST');
+//定义更新商品数据的请求
+export const reqUpdateProduct=product=>ajax(baseUrl+'/manage/product/update',product,'POST');
+//定义获取角色列表的请求
+export const reqRolesList=()=>ajax(baseUrl+'/manage/role/list','GET');
+//定义添加角色的请求
+export const reqAddRole=name=>ajax(baseUrl+'/manage/role/add',{name},'POST');
+//定义更新角色的请求
+export const reqUpdateole=role=>ajax(baseUrl+'/manage/role/update',{role},'POST');
