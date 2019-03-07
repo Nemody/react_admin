@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Card, Input, Button, Select, Icon, Table, message} from 'antd';
 
-import {reqProductsList, reqSearchProductsList} from '../../api';
-import MyButton from '../../components/my-button';
+import {reqProductsList, reqSearchProductsList} from '../../api/index';
+import MyButton from '../../components/my-button/index';
 
 const Option = Select.Option;
 export default class Index extends Component {
@@ -12,7 +12,7 @@ export default class Index extends Component {
         searchType: 'productName',
         searchName: '',
         current: 1
-    }
+    };
 
     componentWillMount() {
         this.columns = [
@@ -87,7 +87,7 @@ export default class Index extends Component {
                 current: 1
             })
         }
-    }
+    };
     //定义收集用户输入的方法
     handleChange = (name, value) => {
         this.setState({

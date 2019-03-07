@@ -47,29 +47,38 @@ class SaveUpdate extends Component {
             //请求数据成功
             OptionsState.map(item => {
                 if (item.value === pCategoryId) {
-                    //说明请求回的二级分类数据是当前父类下的
+                    //说明请求回的二级分类数据是当前父类下的，map遍历并更改数据格式，作为当前一级分类的children属性
                     item.children = this.subCategories.map(item => ({value: item._id, label: item.name}));
                 }
+                //如果请求回的二级分类数据不是当前父类下的，则直接返回当前父类数据即可
                 return item;
             })
         }
-
+        //将最新的options数据渲染至页面
         this.setState({
             options: OptionsState
         })
     };
     //定义请求二级分类的方法
     loadData = async (selectedOptions) => {
+        //当前选中的一级分类，拿到数组的最后一项值，去获取下一级分类的值
+        //此处至于两级分类，即数组中只有一项值，因此通过一级分类查找二级分类
         const targetOption = selectedOptions[selectedOptions.length - 1];
+        //将选中的一级分类设为加载中
         targetOption.loading = true;
+        //调用获取分类列表的方法获取二级分类列表
         await this.getCategories(targetOption.value);
-        //停止加载
+        //获取到二级分类列表之后，将一级分类状态设为停止加载
         targetOption.loading = false;
+        //判断是否拿到了二级分类
         if (this.subCategories.length) {
+            //有二级分类则将其追加为以及分类的children属性，并通过map遍历，将每一项值包装为指定显示的option格式数据，
             targetOption.children = this.subCategories.map(item => ({value: item._id, label: item.name}));
         } else {
+            //如果当前一级分类下没有二级分类，则不需要显示箭头>
             targetOption.isLeaf = true;
         }
+        //最后将最新的options数据渲染在页面
         this.setState({
             options: [...this.state.options]
         })
@@ -106,7 +115,11 @@ class SaveUpdate extends Component {
         const {getFieldDecorator} = form;
         const {state} = location;
         const product = state ? state.product : false;
+        //初始化显示的分类数据  由文档可知，要显示默认的分类数据，应是一个数组
         let category = [];
+        //如果product有值，则判断其是否为一级分类，若是则在category中追加product.categoryId
+        //反之说明其是二级分类，保存两条数据，一条是其父类Id，一条为其自身Id
+        //最终将该数组category作为分类项的默认值进行展示
         if (product) {
             if (product.pCategoryId === '0') {
                 category.push(product.categoryId);
@@ -114,7 +127,6 @@ class SaveUpdate extends Component {
                 category = [product.pCategoryId, product.categoryId];
             }
         }
-
         const formItemLayout = {
             labelCol: {
                 xs: {span: 24},

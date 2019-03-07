@@ -25,13 +25,13 @@ export const reqWeather=(city)=>{
             }
         });
     })
-}
+};
 //获取分类列表的函数
 export const reqCategories=parentId=> ajax(baseUrl+'/manage/category/list',{parentId},'GET');
 //定义添加分类的函数
 export const reqAddCategories=(parentId,categoryName)=>ajax(baseUrl+'/manage/category/add',{parentId,categoryName},'POST');
 //定义修改分类名称的函数
-export const reqUpdateCategoryName=(categoryId,categoryName)=>ajax(baseUrl+'/manage/category/update',{categoryId,categoryName},'POST')
+export const reqUpdateCategoryName=(categoryId,categoryName)=>ajax(baseUrl+'/manage/category/update',{categoryId,categoryName},'POST');
 //定义根据ID获取分类的方法
 export const reqGetCategoryById=(categoryId)=>ajax(baseUrl+'/manage/category/info',{categoryId},'GET');
 //定义获取分页商品列表的函数
@@ -39,12 +39,18 @@ export const reqProductsList=(pageNum,pageSize)=>ajax(baseUrl+'/manage/product/l
 //定义搜索分页商品列表的函数
 export const reqSearchProductsList=({pageNum,pageSize,searchType,searchName})=>ajax(baseUrl+'/manage/product/search',{pageNum,pageSize,[searchType]:searchName},'GET');
 //定义删除图片的请求
-export const reqDelImage=(name,pictureId)=>ajax(baseUrl+'/manage/img/delete',{name,pictureId},'POST');
+export const reqDelImage=(name,id)=>ajax(baseUrl+'/manage/img/delete',{name,id},'POST');
 //定义更新商品数据的请求
 export const reqUpdateProduct=product=>ajax(baseUrl+'/manage/product/update',product,'POST');
+//请求更新商品状态的函数
+export const reqUpdateStatus = (productId, status) => ajax(baseUrl + '/manage/product/updateStatus', {productId, status}, 'POST');
 //定义获取角色列表的请求
 export const reqRolesList=()=>ajax(baseUrl+'/manage/role/list','GET');
 //定义添加角色的请求
 export const reqAddRole=name=>ajax(baseUrl+'/manage/role/add',{name},'POST');
 //定义更新角色的请求
-export const reqUpdateole=role=>ajax(baseUrl+'/manage/role/update',{role},'POST');
+export const reqUpdateRole=role=>ajax(baseUrl+'/manage/role/update',{role},'POST');
+//定义获取用户列表的请求
+export const reqUsersList=()=>ajax(baseUrl+'/manage/user/list','GET');
+//定义创建用户的请求
+export const reqAddUser=user=>ajax(baseUrl+'/manage/user/add',user,'POST');

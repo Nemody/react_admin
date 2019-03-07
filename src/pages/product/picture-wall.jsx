@@ -1,66 +1,81 @@
-import React,{Component} from 'react';
-import { Upload, Icon, Modal,message } from 'antd';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { Upload, Icon, Modal, message } from 'antd';
 
 import {reqDelImage} from '../../api';
-export default class  PictureWall extends Component {
-    static propTypes={
-        productId:PropTypes.string.isRequired,
-        imgs:PropTypes.array
+
+export default class PicturesWall extends Component {
+    static propTypes = {
+        productId: PropTypes.string,
+        imgs: PropTypes.array,
     }
 
     state = {
-        previewVisible: false, //预览图对话框，初始关闭
-        previewImage: '',  //预览图的路径
-        fileList: []       //文件列表
+        previewVisible: false,  //决定对话框是否显示
+        previewImage: '',  //对话框显示图片地址
+        fileList: [],  //上传组件显示已经上传好的图片列表
     };
-    //获取要展示的图片列表
-    componentWillMount(){
 
-            const fileList=this.props.imgs?this.props.imgs.map((item,index)=>({
-                uid: -index,
-                name: item,
-                status: 'done',
-                url: 'http://localhost:5000/upload/'+item
-            })):[];
-
-            this.setState({
-                fileList
+    componentWillMount () {
+        console.log(this.props.imgs);
+        const fileList = this.props.imgs
+            ? this.props.imgs.map((item, index) => {
+                return {
+                    uid: -index,
+                    name: item,
+                    status: 'done', // done 加载完成的图片  loading 正在加载  error 加载失败  "removed" 删除图片
+                    url: 'http://localhost:5000/upload/' + item
+                }
             })
+            : [];
 
+        this.setState({fileList})
     }
 
-    handleCancel = () => this.setState({ previewVisible: false });
-
+    // 隐藏对话框
+    handleCancel = () => this.setState({ previewVisible: false })
+    // 显示预览图调用函数
     handlePreview = (file) => {
         this.setState({
             previewImage: file.url || file.thumbUrl,
             previewVisible: true,
         });
-    };
-    //上传/删除图片的方法
-    handleChange = async ({ file,fileList }) =>{
-        //判断图片是否上传完成
-        if(file.status==='done'){
-            //图片上传完成，更新最后一个文件的名字和地址
-            let lastFile=fileList[fileList.length-1];
-            lastFile.name=file.response.data.name;
-            lastFile.url=file.response.data.url;
-        }else if (file.status==='removed'){
-            //图片删除
-            const result=await reqDelImage(file.name,this.props.productId);
-            if(result.status===0){
-                //图片删除成功
-                message.success('图片删除成功！');
-            } else {
-                message.error('图片删除失败！');
-            }
+    }
+    // 上传/删除图片调用的回调函数
+    handleChange = ({ file, fileList }) => {
+        //判断是否上传成功
+        if (file.status === 'done') {
+            //更新fileList最后一个file的url和name
+            let file = fileList[fileList.length - 1];
+            file.name = file.response.data.name;
+            file.url = file.response.data.url;
+        } else if (file.status === 'removed') {
+
+            //删除图片
+            Modal.confirm({
+                title: '您确认要删除图片吗?',
+                okText: '确认',
+                cancelText: '取消',
+                onOk: async () => {
+                    const result = await reqDelImage(file.name, this.props.productId);
+                    if (result.status === 0) {
+                        message.success('删除图片成功');
+                    } else {
+                        message.error('删除图片失败');
+                    }
+                    this.setState({ fileList })
+
+                },
+                onCancel() {
+                },
+            });
+            return
         }
+
         this.setState({ fileList })
-    };
+    }
 
-
-    render(){
+    render() {
         const { previewVisible, previewImage, fileList } = this.state;
         const uploadButton = (
             <div>
@@ -71,13 +86,14 @@ export default class  PictureWall extends Component {
         return (
             <div>
                 <Upload
-                    action="http://localhost:5000/manage/img/upload"
+                    action="/manage/img/upload"  //上传图片的服务器地址
                     listType="picture-card"
-                    fileList={fileList}
-                    onPreview={this.handlePreview}
-                    onChange={this.handleChange}
-                    name="image"
-                    data={{id:this.props.productId}}
+                    fileList={fileList}     //显示图片文件列表
+                    onPreview={this.handlePreview}  //点击预览调用回调函数
+                    onChange={this.handleChange}   //上传/删除调用的回调函数
+                    name='image'
+                    data={{id: this.props.productId}}
+                    accept='image/*'
                 >
                     {fileList.length >= 3 ? null : uploadButton}
                 </Upload>
@@ -85,6 +101,6 @@ export default class  PictureWall extends Component {
                     <img alt="example" style={{ width: '100%' }} src={previewImage} />
                 </Modal>
             </div>
-        )
+        );
     }
 }

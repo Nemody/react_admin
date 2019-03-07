@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Card, Button, Table, Radio, Modal, message} from 'antd';
-import {reqRolesList, reqAddRole,reqUpdateole} from '../../api';
+import {reqRolesList, reqAddRole,reqUpdateRole} from '../../api';
 import dayjs from 'dayjs';
 
 import AddRoleForm from './add-role-form';
@@ -103,7 +103,7 @@ export default class Role extends Component {
         role.auth_time=Date.now();
 
         //发送请求更新后台数据
-        const result=await reqUpdateole(role);
+        const result=await reqUpdateRole(role);
         if(result.status===0){
             message.success('更新角色成功！');
             this.setState({

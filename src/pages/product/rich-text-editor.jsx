@@ -32,19 +32,14 @@ export default  class RichTextEditor extends Component {
             editorState
         };
     }
-
-
-
     onEditorStateChange = (editorState) => {
         this.setState({
             editorState,
         });
     };
-
     getContent=()=>{
         return draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()));
     }
-
     render() {
         const {editorState} = this.state;
         return (
@@ -53,16 +48,7 @@ export default  class RichTextEditor extends Component {
                     editorState={editorState}
                     editorStyle={{height: 250, border: '1px solid #eee', padding: '0 30px'}}
                     onEditorStateChange={this.onEditorStateChange}
-
                 />
-                {
-                    /*
-                    * <textarea
-                     disabled
-                     value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-                     />
-                    * */
-                }
             </div>
         );
     }
